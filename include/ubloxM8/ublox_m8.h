@@ -43,7 +43,6 @@
 
 #include <boost/function.hpp>
 #include <boost/thread.hpp>
-//#include <boost/bind.hpp>
 
 namespace ublox_m8 {
 
@@ -66,9 +65,11 @@ typedef boost::function<void(CfgNav5&, double&)> CfgNav5Callback;
 //! LOG
 //! MON
 //! NAV
+typedef boost::function<void(NavPosECEF&, double&)> NavPosECEFCallback;
 typedef boost::function<void(NavPosLLH&, double&)> NavPosLLHCallback;
 typedef boost::function<void(NavSol&, double&)> NavSolCallback;
 typedef boost::function<void(NavStatus&, double&)> NavStatusCallback;
+typedef boost::function<void(NavVelECEF&, double&)> NavVelECEFCallback;
 typedef boost::function<void(NavVelNED&, double&)> NavVelNEDCallback;
 typedef boost::function<void(NavSVInfo&, double&)> NavSVInfoCallback;
 typedef boost::function<void(NavTimeGPS&, double&)> NavTimeGPSCallback;
@@ -80,6 +81,8 @@ typedef boost::function<void(NavDGPS&, double&)> NavDGPSCallback;
 typedef boost::function<void(NavClock&, double&)> NavClockCallback;
 //! MGA
 //! RXM
+typedef boost::function<void(RxmRawX&, double&)> RxmRawXCallback;
+typedef boost::function<void(RxmSfrbX&, double&)> RxmSfrbXCallback;
 typedef boost::function<void(RxmSvsi&, double&)> RxmSvsiCallback;
 //! TIM
 //! UPD
@@ -128,9 +131,9 @@ public:
     void SetCfgPrtUsb(bool ubx_input, bool ubx_output, bool nmea_input, bool nmea_output);
     // Set a specifc message to be output periodically
     bool SetCfgMsgRate(uint8_t class_id, uint8_t msg_id, uint8_t rate);
-        // (rate) is relative to the event a message is registered on. For example,
-        // if the rate of a navigation message is set to 2, the message is sent
-        // every second navigation solution.
+    // (rate) is relative to the event a message is registered on. For example,
+    // if the rate of a navigation message is set to 2, the message is sent
+    // every second navigation solution.
 
     bool SetCfgNav5(uint8_t dynamic_model = 3, uint8_t fix_mode = 3);
 
@@ -173,6 +176,7 @@ public:
 
     void set_nav_status_callback(NavStatusCallback callback){nav_status_callback_=callback;};
     void set_nav_sol_callback(NavSolCallback callback){nav_sol_callback_=callback;};
+    void set_nav_pos_ecef_callback(NavPosECEFCallback callback){nav_pos_ecef_callback_=callback;};
     void set_nav_pos_llh_callback(NavPosLLHCallback callback){nav_pos_llh_callback_=callback;};
     void set_nav_sv_info_callback(NavSVInfoCallback callback){nav_sv_info_callback_=callback;};
     void set_nav_time_gps_callback(NavTimeGPSCallback callback){nav_time_gps_callback_=callback;};
@@ -182,8 +186,11 @@ public:
     void set_nav_dop_callback(NavDOPCallback callback){nav_dop_callback_=callback;};
     void set_nav_dgps_callback(NavDGPSCallback callback){nav_dgps_callback_=callback;};
     void set_nav_clock_callback(NavClockCallback callback){nav_clock_callback_=callback;};
+    void set_nav_vel_ecef_callback(NavVelECEFCallback callback){nav_vel_ecef_callback_=callback;};
     void set_nav_vel_ned_callback(NavVelNEDCallback callback){nav_vel_ned_callback_=callback;};
 
+    void set_rxm_rawx_callback(RxmRawXCallback callback){rxm_rawx_callback_=callback;};
+    void set_rxm_sfrbx_callback(RxmSfrbXCallback callback){rxm_sfrbx_callback_=callback;};
     void set_rxm_svsi_callback(RxmSvsiCallback callback){rxm_svsi_callback_=callback;};
 
     void set_parse_log_callback(ParseLogCallback callback){parse_log_callback_=callback;};    
@@ -251,9 +258,11 @@ private:
     CfgPrtCallback cfg_prt_callback_;
     CfgNav5Callback cfg_nav5_callback_;
 
+    NavPosECEFCallback nav_pos_ecef_callback_;
     NavPosLLHCallback nav_pos_llh_callback_;
     NavSolCallback nav_sol_callback_;
     NavStatusCallback nav_status_callback_;
+    NavVelECEFCallback nav_vel_ecef_callback_;
     NavVelNEDCallback nav_vel_ned_callback_;
     NavSVInfoCallback nav_sv_info_callback_;
     NavTimeGPSCallback nav_time_gps_callback_;
@@ -264,6 +273,8 @@ private:
     NavDGPSCallback nav_dgps_callback_;
     NavClockCallback nav_clock_callback_;
 
+    RxmRawXCallback rxm_rawx_callback_;
+    RxmSfrbXCallback rxm_sfrbx_callback_;
     RxmSvsiCallback rxm_svsi_callback_;
     
     ParseLogCallback parse_log_callback_;
