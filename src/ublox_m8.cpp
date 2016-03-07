@@ -261,14 +261,24 @@ void UbloxM8::ReadFile(std::string name)
 {
   uint8_t buf[MAX_NOUT_SIZE];
   std::ifstream ifs(name, std::ios::binary);
+  uint64_t read = 0;
+
+  // get length of file:
+  ifs.seekg(0, ifs.end);
+  uint64_t length = ifs.tellg();
+  ifs.seekg(0, ifs.beg);
 
   while (ifs.good()) {
     ifs.read((char *)buf, sizeof(buf));
+    read += ifs.gcount();
     while (ifs.gcount() >\
       std::streamsize(DATA_BUF_SIZE - buffer_index_)) {
       boost::this_thread::sleep(boost::posix_time::milliseconds(1));
     }
     ReadFromFile(buf, ifs.gcount());
+    std::stringstream output;
+    output << "Handled: " << read << "/" << length << " bytes";
+    log_info_(output.str());
   }
   ifs.close();
 }
