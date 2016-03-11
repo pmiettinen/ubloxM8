@@ -246,6 +246,7 @@ BOOST_PYTHON_MODULE(ublox_m8)
     .add_property("recStat", &RxmRawXPython::recStat)
     .add_property("repeated_block", &RxmRawXPython::repeated_block)
     .add_property("checksum", &RxmRawXPython::checksum)
+    .add_property("as_dict", &RxmRawXPython::as_dict)
   ;
 
   class_<RxmSfrbXPython>("RxmSfrbXPython", init<RxmSfrbX>())
@@ -260,6 +261,7 @@ BOOST_PYTHON_MODULE(ublox_m8)
     .add_property("reserved3", &RxmSfrbXPython::reserved3)
     .add_property("dwrds", &RxmSfrbXPython::dwrds)
     .add_property("checksum", &RxmSfrbXPython::checksum)
+    .add_property("as_dict", &RxmSfrbXPython::as_dict)
   ;
 
   class_<NavPosLLHPython>("NavPosLLHPython", init<NavPosLLH>())
@@ -276,6 +278,7 @@ BOOST_PYTHON_MODULE(ublox_m8)
     .add_property("vertical_accuracy",
       &NavPosLLHPython::vertical_accuracy)
     .add_property("checksum", &NavPosLLHPython::checksum)
+    .add_property("as_dict", &NavPosLLHPython::as_dict)
   ;
 
   class_<NavPosECEFPython>("NavPosECEFPython", init<NavPosECEF>())
@@ -286,6 +289,7 @@ BOOST_PYTHON_MODULE(ublox_m8)
     .add_property("ecefZ", &NavPosECEFPython::ecefZ)
     .add_property("pAcc", &NavPosECEFPython::pAcc)
     .add_property("checksum", &NavPosECEFPython::checksum)
+    .add_property("as_dict", &NavPosECEFPython::as_dict)
   ;
 
   class_<NavVelNEDPython>("NavVelNEDPython", init<NavVelNED>())
@@ -301,6 +305,7 @@ BOOST_PYTHON_MODULE(ublox_m8)
     .add_property("heading_accuracy",
       &NavVelNEDPython::heading_accuracy)
     .add_property("checksum", &NavVelNEDPython::checksum)
+    .add_property("as_dict", &NavVelNEDPython::as_dict)
   ;
 
   class_<NavVelECEFPython>("NavVelECEFPython", init<NavVelECEF>())
@@ -311,6 +316,7 @@ BOOST_PYTHON_MODULE(ublox_m8)
     .add_property("ecefVZ", &NavVelECEFPython::ecefVZ)
     .add_property("sAcc", &NavVelECEFPython::sAcc)
     .add_property("checksum", &NavVelECEFPython::checksum)
+    .add_property("as_dict", &NavVelECEFPython::as_dict)
   ;
 
   class_<SVInfoRepeatedBlock>("SVInfoRepeatedBlock")
@@ -332,5 +338,6 @@ BOOST_PYTHON_MODULE(ublox_m8)
     .add_property("reserved2", &NavSVInfoPython::reserved2)
     .add_property("svinfo_repeated", &NavSVInfoPython::svinfo_repeated)
     .add_property("checksum", &NavSVInfoPython::checksum)
+    .add_property("as_dict", &NavSVInfoPython::as_dict)
   ;
 }

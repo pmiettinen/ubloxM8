@@ -2281,30 +2281,6 @@ namespace ublox_m8 {
 
 
 /*!
-* RXM-SFRBX Message Structure
-* Raw Subframe Data. Thus the message contains preamble,
-* parity bits and all protocol specific overhead and is
-* sent out when new data is received from the transmitter.
-* Message Type: APERIODIC
-* ID: 0x02  0x15  Payload Length=16 + 32*numMeas bytes
-*/
-    PACK(
-            struct RxmSfrbX{
-                UbloxHeader header;
-                uint8_t gnssId;        // GNSS identifier (see Satellite Numbering)
-                uint8_t svId;      // Satellite identifier (see Satellite Numbering)
-                uint8_t reserved1;     // Reserved
-                uint8_t freqId;        // Only used for GLONASS: This is the frequency slot + 7 (range from 0 to 13)
-                uint8_t numWords;      // The number of data words contained in this message (0..16)
-                uint8_t reserved2;     // Reserved
-                uint8_t version;       // Message version, (=1 for this version)
-                uint8_t reserved3;     // Reserved
-                uint32_t dwrd;     // The data words
-                uint8_t checksum[2];
-            });
-
-
-/*!
  * RXM-SVSI Message Structure
  * SV Status Info
  * Message Type: PERIODIC/POLLED

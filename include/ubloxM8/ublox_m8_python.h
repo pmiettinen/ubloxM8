@@ -94,9 +94,41 @@ public:
     return UbloxM8Python::arr2tuple(m_rawx.checksum,
       sizeof(m_rawx.checksum));
   }
+  boost::python::dict as_dict() {
+    boost::python::dict d;
+    boost::python::list l;
+    d["rcvTow"] = rcvTow();
+    d["week"] = week();
+    d["leapS"] = leapS();
+    d["numMeas"] = numMeas();
+    d["recStat"] = recStat();
+    for (uint16_t i = 0; i < numMeas(); i++) {
+      boost::python::dict meas;
+      meas["prMes"] = m_rawx.repeated_block[i].prMes;
+      meas["cpMes"] = m_rawx.repeated_block[i].cpMes;
+      meas["doMes"] = m_rawx.repeated_block[i].doMes;
+      meas["gnssId"] = m_rawx.repeated_block[i].gnssId;
+      meas["svId"] = m_rawx.repeated_block[i].svId;
+      meas["reserved2"] = m_rawx.repeated_block[i].reserved2;
+      meas["freqId"] = m_rawx.repeated_block[i].freqId;
+      meas["locktime"] = m_rawx.repeated_block[i].locktime;
+      meas["cno"] = m_rawx.repeated_block[i].cno;
+      meas["prStdev"] = m_rawx.repeated_block[i].prStdev;
+      meas["cpStdev"] = m_rawx.repeated_block[i].cpStdev;
+      meas["doStdev"] = m_rawx.repeated_block[i].doStdev;
+      meas["trkStat"] = m_rawx.repeated_block[i].trkStat;
+      meas["reserved3"] = m_rawx.repeated_block[i].reserved3;
+      l.append(meas);
+    }
+    d["repeated_block"] = l;
+    return d;
+  }
 private:
   RxmRawX m_rawx;
 };
+
+#include <sstream>
+#include <iomanip>
 
 class RxmSfrbXPython {
 public:
@@ -117,6 +149,25 @@ public:
     return UbloxM8Python::arr2tuple(m_sfrbx.checksum,
       sizeof(m_sfrbx.checksum));
   }
+  boost::python::dict as_dict() {
+    boost::python::dict d;
+    boost::python::list l;
+    d["gnssId"] = gnssId();
+    d["svId"] = svId();
+    d["reserved1"] = reserved1();
+    d["freqId"] = freqId();
+    d["numWords"] = numWords();
+    d["reserved2"] = reserved2();
+    d["version"] = version();
+    d["reserved3"] = reserved3();
+    std::stringstream ss;
+    ss << std::hex << std::uppercase << std::setfill('0');
+    for (uint16_t i = 0; i < numWords(); i++) {
+      ss << std::setw(8) << (int)m_sfrbx.dwrds[i];
+    }
+    d["dwrds"] = ss.str();
+    return d;
+  }
 private:
   RxmSfrbX m_sfrbx;
 };
@@ -136,6 +187,17 @@ public:
     return UbloxM8Python::arr2tuple(m_pos.checksum,
       sizeof(m_pos.checksum));
   }
+  boost::python::dict as_dict() {
+    boost::python::dict d;
+    d["iTOW"] = iTOW();
+    d["longitude_scaled"] = longitude_scaled();
+    d["latitude_scaled"] = latitude_scaled();
+    d["height"] = height();
+    d["height_mean_sea_level"] = height_mean_sea_level();
+    d["horizontal_accuracy"] = horizontal_accuracy();
+    d["vertical_accuracy"] = vertical_accuracy();
+    return d;
+  }
 private:
   NavPosLLH m_pos;
 };
@@ -152,6 +214,15 @@ public:
   boost::python::tuple checksum() {
     return UbloxM8Python::arr2tuple(m_pos.checksum,
       sizeof(m_pos.checksum));
+  }
+  boost::python::dict as_dict() {
+    boost::python::dict d;
+    d["iTOW"] = iTOW();
+    d["ecefX"] = ecefX();
+    d["ecefY"] = ecefY();
+    d["ecefZ"] = ecefZ();
+    d["pAcc"] = pAcc();
+    return d;
   }
 private:
   NavPosECEF m_pos;
@@ -174,6 +245,19 @@ public:
     return UbloxM8Python::arr2tuple(m_vel.checksum,
       sizeof(m_vel.checksum));
   }
+  boost::python::dict as_dict() {
+    boost::python::dict d;
+    d["iTOW"] = iTOW();
+    d["velocity_north"] = velocity_north();
+    d["velocity_east"] = velocity_east();
+    d["velocity_down"] = velocity_down();
+    d["speed"] = speed();
+    d["ground_speed"] = ground_speed();
+    d["heading_scaled"] = heading_scaled();
+    d["speed_accuracy"] = speed_accuracy();
+    d["heading_accuracy"] = heading_accuracy();
+    return d;
+  }
 private:
   NavVelNED m_vel;
 };
@@ -190,6 +274,15 @@ public:
   boost::python::tuple checksum() {
     return UbloxM8Python::arr2tuple(m_vel.checksum,
       sizeof(m_vel.checksum));
+  }
+  boost::python::dict as_dict() {
+    boost::python::dict d;
+    d["iTOW"] = iTOW();
+    d["ecefVX"] = ecefVX();
+    d["ecefVY"] = ecefVY();
+    d["ecefVZ"] = ecefVZ();
+    d["sAcc"] = sAcc();
+    return d;
   }
 private:
   NavVelECEF m_vel;
@@ -209,6 +302,28 @@ public:
   boost::python::tuple checksum() {
     return UbloxM8Python::arr2tuple(m_info.checksum,
       sizeof(m_info.checksum));
+  }
+  boost::python::dict as_dict() {
+    boost::python::dict d;
+    boost::python::list l;
+    d["iTOW"] = iTOW();
+    d["numch"] = numch();
+    d["global_flags"] = global_flags();
+    d["reserved2"] = reserved2();
+    for (uint16_t i = 0; i < numch(); i++) {
+      boost::python::dict meas;
+      meas["ch_num"] = m_info.svinfo_repeated[i].ch_num;
+      meas["svid"] = m_info.svinfo_repeated[i].svid;
+      meas["flags"] = m_info.svinfo_repeated[i].flags;
+      meas["quality"] = m_info.svinfo_repeated[i].quality;
+      meas["cno"] = m_info.svinfo_repeated[i].cno;
+      meas["elev"] = m_info.svinfo_repeated[i].elev;
+      meas["azim"] = m_info.svinfo_repeated[i].azim;
+      meas["prRes"] = m_info.svinfo_repeated[i].prRes;
+      l.append(meas);
+    }
+    d["svinfo_repeated"] = l;
+    return d;
   }
 private:
   NavSVInfo m_info;
